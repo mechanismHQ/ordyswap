@@ -8,6 +8,7 @@ export const Tx: React.FC<{ children?: React.ReactNode }> = () => {
   const [txdata, setTx] = useState("");
   const { isSignedIn } = useAuth();
   const { openContractCall, isRequestPending } = useOpenContractCall();
+  const [txid, setTxid] = useState("");
 
   const submit = useCallback(() => {
     const info = parse(txdata) as {
@@ -19,6 +20,9 @@ export const Tx: React.FC<{ children?: React.ReactNode }> = () => {
     openContractCall({
       ...info,
       postConditionMode: PostConditionMode.Allow,
+      onFinish(txFinished) {
+        setTxid(txFinished.txId);
+      },
     });
     console.log(info);
   }, [txdata, openContractCall]);
@@ -30,7 +34,7 @@ export const Tx: React.FC<{ children?: React.ReactNode }> = () => {
     <div>
       <p>paste in tx data from teh cli, and it'll open the stacks wallet</p>
       <form
-        onClick={(e) => {
+        onSubmit={(e) => {
           e.preventDefault();
           submit();
         }}
@@ -48,6 +52,23 @@ export const Tx: React.FC<{ children?: React.ReactNode }> = () => {
         </div>
         <button>submit</button>
       </form>
+      {txid && (
+        <>
+          <p>Your transaction was broadcasted.</p>
+          <p>
+            <pre>{txid}</pre>
+          </p>
+          <p>
+            <a
+              target="_blank"
+              rel="nofollow"
+              href={`https://explorer.stacks.co/txid/${txid}?chain=mainnet`}
+            >
+              View on explorer
+            </a>
+          </p>
+        </>
+      )}
     </div>
   );
 };

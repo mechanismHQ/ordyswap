@@ -5,6 +5,10 @@ Trustless atomic swaps between Ordinals and Stacks (STX).
 > **Warning**
 > This repo is purely made for demonstration purposes. It has not been audited or even deeply tested. Use at your own risk.
 
+> **Warning**
+> This version of ordyswap should only be used with "Genesis" Ordinals,
+> not Ordinals that have already been transferred.
+
 <!-- TOC -->
 
 - [Ordyswap](#ordyswap)
@@ -16,6 +20,13 @@ Trustless atomic swaps between Ordinals and Stacks (STX).
     - [Get offer details](#get-offer-details)
     - [Send the Ordinal](#send-the-ordinal)
     - [Finalize the offer](#finalize-the-offer)
+    - [Check the validity of a transfer](#check-the-validity-of-a-transfer)
+    - [Cancelling an offer](#cancelling-an-offer)
+  - [FAQ](#faq)
+    - [Can I make a swap with other Stacks assets like an NFT or fungible token like xBTC?](#can-i-make-a-swap-with-other-stacks-assets-like-an-nft-or-fungible-token-like-xbtc)
+    - [Can I make a swap for BTC?](#can-i-make-a-swap-for-btc)
+    - [Is this actively developed?](#is-this-actively-developed)
+    - [What is up with this funky website where I paste in my tx?](#what-is-up-with-this-funky-website-where-i-paste-in-my-tx)
 
 <!-- /TOC -->
 
@@ -100,6 +111,23 @@ ordyswap finalize-offer <btcTxid> <offerId>
 
 The console will output a big JSON blob containing a transaction payload. Open up <>, paste in the data, and hit submit. Your wallet will prompt you to approve and sign the transaction.
 
+### Check the validity of a transfer
+
+You can check to make sure a transfer is valid by running
+
+```bash
+ordyswap get-tx-data <btcTxid> <offerId>
+```
+
+### Cancelling an offer
+
+Users can cancel an offer and eventually get their STX back. The flow for fully cancelling is:
+
+1. Cancel your order. The offer is still valid for 50 BTC blocks
+2. After 50 blocks, refund your order. Your STX will be sent back to you
+
+The 50 block required wait is to prevent an attack where an offer is cancelled as soon as they see the Ordinal transfer in the mempool.
+
 ## FAQ
 
 ### Can I make a swap with other Stacks assets (like an NFT or fungible token like xBTC)?
@@ -113,3 +141,7 @@ This project is really only built to support Ordinal<->Stacks swaps. Swapping fo
 ### Is this actively developed?
 
 No, this was made for fun
+
+### What is up with this funky website where I paste in my tx?
+
+In the spirit of shipping quickly, this project is just a CLI. I didn't want users to have to manage private keys manually, so the web app is a very simple way for the project to broadcast a transaction using a wallet. It's not possible to trigger a transaction from a CLI directly.

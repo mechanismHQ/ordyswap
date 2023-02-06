@@ -2,7 +2,13 @@
 
 import { Command, program } from "@commander-js/extra-typings";
 import { bytesToHex, hexToBytes } from "micro-stacks/common";
-import { clarigenClient, swapContract, getOffer } from "../contract";
+import {
+  clarigenClient,
+  swapContract,
+  getOffer,
+  isTransferValid,
+} from "../contract";
+import { Address } from "micro-btc-signer";
 import {
   addressToOutput,
   decodeOrdId,
@@ -12,7 +18,7 @@ import {
 import { stringify } from "superjson";
 import { ClarityValue } from "micro-stacks/clarity";
 import BigNumber from "bignumber.js";
-import { getTxData } from "../tx-data";
+import { getTxData, getTxPending } from "../tx-data";
 
 program.name("ordyswap").description("CLI for making Ordinal atomic swaps");
 
@@ -23,12 +29,15 @@ function serializeTx(tx: {
   functionName: string;
 }) {
   const { contractAddress, contractName, functionArgs, functionName } = tx;
-  return stringify({
+  const json = stringify({
     contractAddress,
     contractName,
     functionArgs,
     functionName,
   });
+  console.log("\n---------\nCopy this JSON:\n");
+  console.log(json);
+  console.log("\n---------\n");
 }
 
 const makeOffer = new Command("make-offer")
@@ -47,6 +56,10 @@ const makeOffer = new Command("make-offer")
     const output = addressToOutput(btcAddress);
     console.log("btcAddress", btcAddress);
     console.log("Output", bytesToHex(output));
+    const addr = Address().decode(btcAddress);
+    if (addr.type !== "tr") {
+      console.log("The BTC address provided is not p2tr. Exiting.");
+    }
 
     const tx = swapContract().createOffer({
       txid: hexToBytes(txid),
@@ -55,8 +68,8 @@ const makeOffer = new Command("make-offer")
       recipient: recipientAddress,
       amount: BigInt(ustx.toFixed()),
     });
-    console.log(serializeTx(tx));
-    console.log(tx.nativeArgs);
+    serializeTx(tx);
+    // console.log(tx.nativeArgs);
   });
 
 program.addCommand(makeOffer);
@@ -67,10 +80,16 @@ const getOfferCmd = new Command("get-offer")
     const idInt = BigInt(id);
     const clarigen = clarigenClient();
     const contract = swapContract();
-    const offer = await clarigen.ro(contract.getOffer(idInt));
-    const cancelledAt = await clarigen.ro(contract.getOfferCancelled(idInt));
-    const refunded = await clarigen.ro(contract.getOfferRefunded(idInt));
-    const accepted = await clarigen.ro(contract.getOfferAccepted(idInt));
+    const offer = await clarigen.ro(contract.getOffer(idInt), { latest: true });
+    const cancelledAt = await clarigen.ro(contract.getOfferCancelled(idInt), {
+      tip: "latest",
+    });
+    const refunded = await clarigen.ro(contract.getOfferRefunded(idInt), {
+      tip: "latest",
+    });
+    const accepted = await clarigen.ro(contract.getOfferAccepted(idInt), {
+      tip: "latest",
+    });
     if (offer === null) {
       console.log(`Couldn't find offer with ID ${id}`);
       return;
@@ -107,6 +126,13 @@ const acceptOffer = new Command("finalize-offer")
       console.log(`Couldn't find offer with ID ${offerIdStr}`);
       return;
     }
+    const isValid = await isTransferValid(txid, offerIdStr);
+    if (!isValid.isOk) {
+      console.log("Transfer is not valid.");
+      console.log("Contract error code", isValid.value);
+      return;
+    }
+    console.log("Transfer is valid!");
     const recipientBtc = outputToAddress(offer.output);
     const txData = await getTxData(txid, recipientBtc);
 
@@ -119,10 +145,25 @@ const acceptOffer = new Command("finalize-offer")
       outputIndex: txData.outputIndex,
     });
 
-    console.log(serializeTx(tx));
+    serializeTx(tx);
   });
 
 program.addCommand(acceptOffer);
+
+const getTxDataCmd = new Command("get-tx-data")
+  .argument("<btcTxid>")
+  .argument("<offerId>")
+  .action(async (txid, offerIdStr) => {
+    const result = await isTransferValid(txid, offerIdStr);
+    if (result.isOk) {
+      console.log("Transfer is valid!");
+    } else {
+      console.log("Error when checking validity:");
+      console.log(result.value);
+    }
+  });
+
+program.addCommand(getTxDataCmd);
 
 async function run() {
   await program.parseAsync(process.argv);

@@ -78,6 +78,7 @@
       (parsed-tx (unwrap! (contract-call? 'SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin parse-tx tx) ERR_INVALID_TX))
       (output (unwrap! (element-at (get outs parsed-tx) output-index) ERR_INVALID_TX))
       (offer (unwrap! (map-get? offers-map offer-id) ERR_INVALID_OFFER))
+      ;; TODO: fix this, incorrect fetching of input
       (input (get outpoint (unwrap! (element-at (get ins parsed-tx) (get index offer)) ERR_INVALID_TX)))
       (input-txid (get hash input))
       (input-idx (get index input))

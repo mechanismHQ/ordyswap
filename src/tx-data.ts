@@ -87,9 +87,30 @@ export function getTxHex(hex: string) {
   return tx.toBytes(true, false);
 }
 
+export async function fetchTx(txid: string, client: ElectrumClient) {
+  const tx = await client.blockchain_transaction_get(txid, true);
+  return tx;
+}
+
+export async function getTxPending(txid: string, address: string) {
+  return withElectrumClient(async (client) => {
+    const tx = await fetchTx(txid, client);
+    return tx;
+  });
+}
+
 export async function getTxData(txid: string, address: string) {
   return withElectrumClient(async (electrumClient) => {
     const tx = await electrumClient.blockchain_transaction_get(txid, true);
+    if (typeof tx.confirmations === "undefined" || tx.confirmations < 1) {
+      // console.log("Tx is not confirmed");
+      // console.log("Inputs:");
+      // tx.vin.forEach((vin) => {
+      //   const ordId = `${vin.txid}i${vin.vout}`;
+      //   console.log(ordId);
+      // });
+      throw new Error("Tx is not confirmed");
+    }
     const burnHeight = await confirmationsToHeight(tx.confirmations);
     const { header, stacksHeight, prevBlocks } = await findStacksBlockAtHeight(
       burnHeight,
