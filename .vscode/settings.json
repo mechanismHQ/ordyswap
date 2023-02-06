@@ -1,0 +1,6 @@
+
+{
+    // "deno.enable": true,
+    "files.eol": "\n"
+    "deno.enablePaths": ["./tests"]
+}

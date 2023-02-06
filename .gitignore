@@ -1,0 +1,9 @@
+
+**/settings/Mainnet.toml
+**/settings/Testnet.toml
+.cache/**
+history.txt
+node_modules
+.env
+.env*.local
+dist

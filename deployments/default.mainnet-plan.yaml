@@ -1,0 +1,18 @@
+---
+id: 0
+name: Mainnet deployment
+network: mainnet
+stacks-node: "https://stacks-node-api.mainnet.stacks.co"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoin.blockstack.com:8332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: ord-swap
+            expected-sender: SP4XW6YXH4FYZZSYVDAX5SMFJQJ4WWGXG0K09QGS
+            cost: 300000
+            path: contracts/ord-swap.clar
+            anchor-block-only: true
+            clarity-version: 1
+      epoch: "2.0"

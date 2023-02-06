@@ -1,0 +1,31 @@
+{
+  // "extends": "@tsconfig/node18",
+  "compilerOptions": {
+    "lib": ["es2022"],
+    "module": "es6",
+    "target": "es2022",
+
+    // "strict": true,
+    // "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
+    "moduleDetection": "auto",
+    "esModuleInterop": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    // "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    // "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    // "noImplicitOverride": true,
+    // "noImplicitReturns": true,
+    // "noPropertyAccessFromIndexSignature": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "importsNotUsedAsValues": "error",
+    "checkJs": true
+  },
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "include": ["src", "scripts"],
+  "exclude": ["node_modules"]
+}
