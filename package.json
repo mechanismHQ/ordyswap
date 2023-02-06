@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": false,
   "scripts": {
     "cli:dev": "node -r @swc-node/register src/commands/index.ts",
     "build": "tsup-node src/commands/index.ts --format esm",
     "dev": "pnpm build && node dist/index.mjs",
-    "run": "node dist/index.mjs"
+    "run": "node dist/index.mjs",
+    "prepublishOnly": "pnpm build"
   },
   "bin": {
     "ordyswap": "./dist/index.mjs"
