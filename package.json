@@ -9,7 +9,8 @@
     "build": "tsup-node src/commands/index.ts --format esm",
     "dev": "pnpm build && node dist/index.mjs",
     "run": "node dist/index.mjs",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "build:web": "pnpm --filter ordyswap-web build"
   },
   "bin": {
     "ordyswap": "./dist/index.mjs"
@@ -18,6 +19,7 @@
     "dist"
   ],
   "keywords": [],
+  "repository": "https://github.com/mechanismHQ/ordyswap",
   "author": "Hank Stoever",
   "license": "ISC",
   "dependencies": {

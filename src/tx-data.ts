@@ -92,7 +92,7 @@ export async function fetchTx(txid: string, client: ElectrumClient) {
   return tx;
 }
 
-export async function getTxPending(txid: string, address: string) {
+export async function getTxPending(txid: string) {
   return withElectrumClient(async (client) => {
     const tx = await fetchTx(txid, client);
     return tx;

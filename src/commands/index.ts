@@ -152,8 +152,17 @@ program.addCommand(acceptOffer);
 
 const getTxDataCmd = new Command("get-tx-data")
   .argument("<btcTxid>")
-  .argument("<offerId>")
-  .action(async (txid, offerIdStr) => {
+  .argument("[offerId]")
+  .option("--verbose", "", false)
+  .action(async (txid, offerIdStr, options) => {
+    const pending = await getTxPending(txid);
+    if (!offerIdStr || typeof pending.confirmations === "undefined") {
+      console.log("Inputs:");
+      pending.vin.forEach((vin) => {
+        console.log(`${vin.txid}.${vin.vout}`);
+      });
+      return;
+    }
     const result = await isTransferValid(txid, offerIdStr);
     if (result.isOk) {
       console.log("Transfer is valid!");
@@ -161,6 +170,9 @@ const getTxDataCmd = new Command("get-tx-data")
       console.log("Error when checking validity:");
       console.log(result.value);
     }
+    // if (options.verbose) {
+    //   console.log(await getTxPending(txid));
+    // }
   });
 
 program.addCommand(getTxDataCmd);
