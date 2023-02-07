@@ -22,6 +22,7 @@ export const Tx: React.FC<{ children?: React.ReactNode }> = () => {
       postConditionMode: PostConditionMode.Allow,
       onFinish(txFinished) {
         setTxid(txFinished.txId);
+        setTx("");
       },
     });
     console.log(info);

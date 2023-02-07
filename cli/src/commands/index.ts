@@ -63,10 +63,21 @@ const makeOffer = new Command("make-offer")
     const { txid, index } = decodeOrdId(ordId);
     const ustx = stxToMicroStx(amount);
     console.log(c.bold.yellow.bgRed.italic("Important!"));
-    const url = `https://ordinals.com/inscription/${ordId}`;
-    console.log(c.red(`Visit ${c.underline.blue(url)}`));
-    console.log(c.red('and make sure the "output" property matches:'));
-    console.log(c.italic(`${txid}:${index}`));
+    const urlRoute = ordId.includes("i") ? "inscription" : "output";
+    const url = `https://ordinals.com/${urlRoute}/${ordId}`;
+    if (urlRoute === "output") {
+      console.log(c.red(`Visit ${c.underline.blue(url)}`));
+      console.log(
+        c.red("and click on the inscription. On the inscription page,")
+      );
+      console.log(c.red('make sure the "output" property matches:'));
+      console.log(c.italic(`${txid}:${index}`));
+    } else {
+      console.log(c.red(`Visit ${c.underline.blue(url)}`));
+      console.log(c.red('and make sure the "output" property matches:'));
+      console.log(c.italic(`${txid}:${index}`));
+    }
+
     console.log("");
     console.log("Offer details:");
     console.log("");
@@ -201,6 +212,7 @@ const getTxDataCmd = new Command("get-tx-data")
       console.log(
         c.bold.green("The tx looks good! You can finalize after confirmation.")
       );
+      return;
     }
     const txData = await getTxData(txid, offer);
     if (txData.inputIndex === -1) {

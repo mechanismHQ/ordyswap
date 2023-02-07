@@ -22,6 +22,7 @@ Trustless atomic swaps between Ordinals and Stacks (STX).
     - [Finalize the offer](#finalize-the-offer)
     - [Check the validity of a transfer](#check-the-validity-of-a-transfer)
     - [Cancelling an offer](#cancelling-an-offer)
+  - [Advanced: swapping an Ordinal that was already sent somewhere](#advanced-swapping-an-ordinal-that-was-already-sent-somewhere)
   - [FAQ](#faq)
     - [Can I make a swap with other Stacks assets like an NFT or a fungible token like xBTC?](#can-i-make-a-swap-with-other-stacks-assets-like-an-nft-or-a-fungible-token-like-xbtc)
     - [Can I make a swap for BTC?](#can-i-make-a-swap-for-btc)
@@ -64,7 +65,7 @@ You can run the CLI as `ordyswap`.
 
 ### Create an offer
 
-To create an offer, first find the "Ordinal ID" for the Ordinal you want to buy. From an [inscription's page](https://ordinals.com/inscription/a188465951f549724ce1206d31efecacc93716a49dfb21081ac0076f291b1231i0), this is the "Id" property. It's in the format `{txid}.{index}`.
+To create an offer, first find the "Ordinal ID" for the Ordinal you want to buy. From an [inscription's page](https://ordinals.com/inscription/a188465951f549724ce1206d31efecacc93716a49dfb21081ac0076f291b1231i0), this is the "Id" property. It's in the format `{txid}.{index}`. **Important** if the "output" property doesn't look like the "ID" property (different hash), then pay attention to the "advanced" section at the bottom of this document.
 
 Next, get an Ordinal "receive" address using the `ord` CLI. Or, follow the instructions for using [Sparrow to receive Ordinals](https://gist.github.com/windsok/5b53a1ced6ef3eddbde260337de28980).
 
@@ -140,6 +141,22 @@ After 50 blocks:
 ordyswap refund-order <id>
 ```
 
+## Advanced: swapping an Ordinal that was already sent somewhere
+
+The easiest way to use `ordyswap` is by swapping for an Ordinal that was minted by the seller. It's still perfectly possible to swap for Ordinals that have been traded, although you need to pay attention to more details.
+
+When creating an offer for an already-transferred Ordinal, **you need to use the "output ID" as the Ordinal ID.**
+
+Here's an example: Alice wants to swap with Bob for [this very rare inscription](https://ordinals.com/inscription/a5bf30241bb3b266c3c66851d4ac95ce62f5bffa4a31bef78bd1f409386b4c93i0). If you look at the properties of that inscription, you can see that the "output" isn't the same as the "ID". This means that the Ordinal has been sent out of the minter's address.
+
+When making an offer for this ordinal, first click the "output" link, which takes you to [this output page](https://ordinals.com/output/cba22ff59a5d65a34bfbeea9a4220c922bdd0d9ce35a3ff3813b98fd81133ecd:0). **Make sure that this output only contains one Ordinal**. Ordyswap probably won't work otherwise.
+
+Once that's all good, use the **output ID** when making an offer. For example, you would run:
+
+```bash
+ordyswap make-offer cba22ff59a5d65a34bfbeea9a4220c922bdd0d9ce35a3ff3813b98fd81133ecd:0 <amount> <btcAddress> <sellerStxAddress>
+```
+
 ## FAQ
 
 ### Can I make a swap with other Stacks assets (like an NFT or a fungible token like xBTC)?
@@ -157,3 +174,7 @@ No, this was made for fun
 ### What is up with this funky website where I paste in my tx?
 
 In the spirit of shipping quickly, this project is just a CLI. I didn't want users to have to manage private keys manually, so the web app is a very simple way for the project to broadcast a transaction using a wallet. It's not possible to trigger a transaction from a CLI directly.
+
+### Help! The CLI says my offer doesn't exist (or similar)
+
+The RPC endpoints sometimes have a little lag compared to what you might see on an explorer. If the transaction was just confirmed, wait a minute and try again.
