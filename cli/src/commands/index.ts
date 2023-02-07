@@ -26,8 +26,12 @@ import {
 // import { bold, yellow, red, italic, underline } from "kleur/colors";
 import c from "ansi-colors";
 import { getAllPrints } from "../logs";
+import { VERSION } from "./version";
 
-program.name("ordyswap").description("CLI for making Ordinal atomic swaps");
+program
+  .name("ordyswap")
+  .description("CLI for making Ordinal atomic swaps")
+  .version(VERSION);
 
 function serializeTx(
   tx: {

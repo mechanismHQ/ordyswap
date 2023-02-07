@@ -1,5 +1,11 @@
 # ordyswap
 
+## 1.2.2
+
+### Patch Changes
+
+- Include the version in CLI
+
 ## 1.2.1
 
 ### Patch Changes

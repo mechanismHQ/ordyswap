@@ -24,7 +24,8 @@
     // "noUnusedLocals": true,
     // "noUnusedParameters": true,
     // "importsNotUsedAsValues": "error",
-    "checkJs": true
+    "checkJs": true,
+    "resolveJsonModule": true
   },
   "$schema": "https://json.schemastore.org/tsconfig",
   "include": ["src", "scripts"],
