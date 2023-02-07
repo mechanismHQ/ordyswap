@@ -10,7 +10,8 @@
     "dev": "pnpm build && node dist/index.mjs",
     "run": "node dist/index.mjs",
     "prepublishOnly": "pnpm build",
-    "build:web": "pnpm --filter ordyswap-web build"
+    "build:web": "pnpm --filter ordyswap-web build",
+    "typecheck": "tsc --noEmit"
   },
   "bin": {
     "ordyswap": "./dist/index.mjs"

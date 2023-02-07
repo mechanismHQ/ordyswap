@@ -2974,7 +2974,7 @@ export const contracts = {
     "clarity_version": "Clarity1",
     contractName: "clarity-bitcoin",
   },
-  ordy: {
+  ordyswapV1: {
     "functions": {
       makeNextId: {
         "name": "make-next-id",
@@ -3004,7 +3004,7 @@ export const contracts = {
           { "name": "recipient", "type": "principal" },
         ],
         "outputs": {
-          "type": { "response": { "ok": "bool", "error": "uint128" } },
+          "type": { "response": { "ok": "uint128", "error": "uint128" } },
         },
       } as TypedAbiFunction<
         [
@@ -3014,7 +3014,7 @@ export const contracts = {
           output: TypedAbiArg<Uint8Array, "output">,
           recipient: TypedAbiArg<string, "recipient">,
         ],
-        Response<boolean, bigint>
+        Response<bigint, bigint>
       >,
       finalizeOffer: {
         "name": "finalize-offer",
@@ -3059,7 +3059,7 @@ export const contracts = {
           { "name": "offer-id", "type": "uint128" },
         ],
         "outputs": {
-          "type": { "response": { "ok": "bool", "error": "uint128" } },
+          "type": { "response": { "ok": "uint128", "error": "uint128" } },
         },
       } as TypedAbiFunction<[
         block: TypedAbiArg<{
@@ -3076,18 +3076,24 @@ export const contracts = {
         outputIndex: TypedAbiArg<number | bigint, "outputIndex">,
         inputIndex: TypedAbiArg<number | bigint, "inputIndex">,
         offerId: TypedAbiArg<number | bigint, "offerId">,
-      ], Response<boolean, bigint>>,
+      ], Response<bigint, bigint>>,
       refundCancelledOffer: {
         "name": "refund-cancelled-offer",
         "access": "public",
         "args": [{ "name": "id", "type": "uint128" }],
         "outputs": {
-          "type": { "response": { "ok": "bool", "error": "uint128" } },
+          "type": { "response": { "ok": "uint128", "error": "uint128" } },
         },
       } as TypedAbiFunction<
         [id: TypedAbiArg<number | bigint, "id">],
-        Response<boolean, bigint>
+        Response<bigint, bigint>
       >,
+      getLastId: {
+        "name": "get-last-id",
+        "access": "read_only",
+        "args": [],
+        "outputs": { "type": "uint128" },
+      } as TypedAbiFunction<[], bigint>,
       getOffer: {
         "name": "get-offer",
         "access": "read_only",
@@ -3365,7 +3371,7 @@ export const contracts = {
     "non_fungible_tokens": [],
     "fungible_tokens": [],
     "clarity_version": "Clarity1",
-    contractName: "ordy",
+    contractName: "ordyswap-v1",
   },
 } as const;
 

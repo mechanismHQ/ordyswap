@@ -61,6 +61,7 @@
     (print {
       topic: "new-offer",
       offer: {
+        id: id,
         txid: txid,
         index: index,
         amount: amount,
@@ -69,7 +70,7 @@
         recipient: recipient,
       }
     })
-    (ok true)
+    (ok id)
   )
 )
 
@@ -138,10 +139,10 @@
     (asserts! (map-insert offers-accepted-map offer-id true) ERR_OFFER_ACCEPTED)
     (print {
       topic: "offer-finalized",
-      offer: offer,
+      offer: (merge offer { id: offer-id }),
       txid: (contract-call? 'SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin get-txid tx)
     })
-    (ok true)
+    (ok offer-id)
   )
 )
 
@@ -160,7 +161,7 @@
     (asserts! (map-insert offers-cancelled-map id (+ burn-block-height u50)) ERR_INVALID_OFFER)
     (print {
       topic: "offer-cancelled",
-      offer: offer,
+      offer: (merge offer { id: id }),
     })
     (ok true)
   )
@@ -178,9 +179,9 @@
     (try! (as-contract (stx-transfer? (get amount offer) (as-contract tx-sender) (get sender offer))))
     (print {
       topic: "offer-refunded",
-      offer: offer,
+      offer: (merge offer { id: id }),
     })
-    (ok true)
+    (ok id)
   )
 )
 
@@ -193,6 +194,8 @@
 (define-read-only (get-offer-cancelled (id uint)) (map-get? offers-cancelled-map id))
 
 (define-read-only (get-offer-refunded (id uint)) (map-get? offers-cancelled-map id))
+
+(define-read-only (get-last-id) (var-get last-id-var))
 
 ;; Private
 

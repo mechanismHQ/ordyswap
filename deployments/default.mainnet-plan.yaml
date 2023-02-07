@@ -9,7 +9,7 @@ plan:
     - id: 0
       transactions:
         - contract-publish:
-            contract-name: ordy
+            contract-name: ordyswap-v1
             expected-sender: SP4XW6YXH4FYZZSYVDAX5SMFJQJ4WWGXG0K09QGS
             cost: 300000
             path: contracts/ord-swap.clar

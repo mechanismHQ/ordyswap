@@ -10,11 +10,11 @@ import { outputToAddress } from "./utils";
 import { getTxData, getTxPending } from "./tx-data";
 
 export type Offer = NonNullable<
-  FunctionReturnType<(typeof contracts)["ordy"]["functions"]["getOffer"]>
+  FunctionReturnType<(typeof contracts)["ordyswapV1"]["functions"]["getOffer"]>
 >;
 
 export function swapContract() {
-  return projectFactory(project, "mainnet").ordy;
+  return projectFactory(project, "mainnet").ordyswapV1;
   // return contractFactory(contracts.ordSwap, "AAA.b");
 }
 
