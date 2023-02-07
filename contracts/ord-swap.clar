@@ -58,6 +58,17 @@
       sender: tx-sender,
       recipient: recipient,
     })
+    (print {
+      topic: "new-offer",
+      offer: {
+        txid: txid,
+        index: index,
+        amount: amount,
+        output: output,
+        sender: tx-sender,
+        recipient: recipient,
+      }
+    })
     (ok true)
   )
 )

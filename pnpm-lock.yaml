@@ -9,6 +9,7 @@ importers:
       '@clarigen/core': ^1.0.10
       '@clarigen/node': ^1.0.10
       '@commander-js/extra-typings': ^10.0.2
+      '@stacks/stacks-blockchain-api-types': ^6.3.4
       '@swc-node/register': ^1.5.5
       '@swc/core': ^1.3.32
       '@types/node': ^18.11.19
@@ -37,6 +38,7 @@ importers:
     devDependencies:
       '@changesets/changelog-github': 0.4.8
       '@changesets/cli': 2.26.0
+      '@stacks/stacks-blockchain-api-types': 6.3.4
       '@swc-node/register': 1.5.5_ofrkegp7wplvaewrpezjkk4xzm
       '@swc/core': 1.3.32
       '@types/node': 18.11.19
@@ -879,6 +881,10 @@ packages:
   /@scure/base/1.1.1:
     resolution: {integrity: sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA==}
     dev: false
+
+  /@stacks/stacks-blockchain-api-types/6.3.4:
+    resolution: {integrity: sha512-zrjKPGJN4p1azzmh8j0Yj+ZjQ0L9F01qJjAxOtBpapmFbGr1NUuPT1GthIg76y+dobdjSDPN39LpoJG/FbWFLw==}
+    dev: true
 
   /@swc-node/core/1.9.2_@swc+core@1.3.32:
     resolution: {integrity: sha512-tInCla6NO1HEQwhIc/K7PCOu4X3ppqw5xYNEMD7i41SyRuH7yp3u8x7x2cqeAD+6IAhJ5jKDPv2QRLPz7Xt3EA==}

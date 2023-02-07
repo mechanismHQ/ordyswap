@@ -25,6 +25,7 @@ import {
 } from "micro-stacks/transactions";
 // import { bold, yellow, red, italic, underline } from "kleur/colors";
 import c from "ansi-colors";
+import { getAllPrints } from "../logs";
 
 program.name("ordyswap").description("CLI for making Ordinal atomic swaps");
 
@@ -46,6 +47,9 @@ function serializeTx(
     postConditions,
   });
   console.log("\n---------\nCopy this JSON:\n");
+  console.log(
+    `Open in ${c.underline.blue("https://mechanismhq.github.io/ordyswap")}`
+  );
   console.log(json);
   console.log("\n---------\n");
 }
@@ -201,6 +205,20 @@ const getTxDataCmd = new Command("get-tx-data")
   });
 
 program.addCommand(getTxDataCmd);
+
+const getLogs = new Command("events").action(async () => {
+  const events = await getAllPrints();
+  events.forEach((e) => {
+    console.log("-----");
+    const {
+      print: { topic, ...rest },
+    } = e;
+    console.log(c.bold(topic));
+    console.log(rest);
+  });
+});
+
+program.addCommand(getLogs);
 
 async function run() {
   await program.parseAsync(process.argv);

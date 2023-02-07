@@ -83,7 +83,7 @@ The arguments are:
 - `btcAddress`: Your BTC address for receiving Ordinals
 - `recipient`: The STX address where the owner of the Ordinal will receive STX upon claiming. This means you need to ask for their STX address before making an offer.
 
-In the output will be a big JSON blob containing a transaction payload. Open up <> and paste in the transaction data. Hit "submit" and your installed wallet will open a popup allowing you to approve and sign your transaction.
+In the output will be a big JSON blob containing a transaction payload. Open up https://mechanismhq.github.io/ordyswap and paste in the transaction data. Hit "submit" and your installed wallet will open a popup allowing you to approve and sign your transaction.
 
 ### Get offer details
 
@@ -109,7 +109,7 @@ After the transaction sending the Ordinal has 1 confirmation, you can finalize t
 ordyswap finalize-offer <btcTxid> <offerId>
 ```
 
-The console will output a big JSON blob containing a transaction payload. Open up <>, paste in the data, and hit submit. Your wallet will prompt you to approve and sign the transaction.
+The console will output a big JSON blob containing a transaction payload. Open up https://mechanismhq.github.io/ordyswap, paste in the data, and hit submit. Your wallet will prompt you to approve and sign the transaction.
 
 ### Check the validity of a transfer
 
