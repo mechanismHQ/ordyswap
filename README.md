@@ -28,6 +28,7 @@ Trustless atomic swaps between Ordinals and Stacks (STX).
     - [Can I make a swap for BTC?](#can-i-make-a-swap-for-btc)
     - [Is this actively developed?](#is-this-actively-developed)
     - [What is up with this funky website where I paste in my tx?](#what-is-up-with-this-funky-website-where-i-paste-in-my-tx)
+    - [Help! The CLI says my offer doesn't exist or similar](#help-the-cli-says-my-offer-doesnt-exist-or-similar)
 
 <!-- /TOC -->
 
