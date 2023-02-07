@@ -103,7 +103,6 @@ export async function getTxPending(txid: string) {
 export async function getTxData(txid: string, offer: Offer) {
   return withElectrumClient(async (electrumClient) => {
     const address = outputToAddress(offer.output);
-    console.log("address", address);
     const ordTxid = bytesToHex(offer.txid);
     const ordIdx = Number(offer.index);
     const tx = await electrumClient.blockchain_transaction_get(txid, true);
@@ -130,6 +129,11 @@ export async function getTxData(txid: string, offer: Offer) {
       const addressMatch = vout.scriptPubKey.address === address;
       return addressMatch || addressesMatch;
     });
+
+    if (outputIndex === -1) {
+      // console.log("tx.vout", tx.vout);
+      throw new Error("Unable to find matching output");
+    }
 
     const amount = btcToSats(tx.vout[outputIndex].value);
     const blockArg = {

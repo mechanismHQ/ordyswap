@@ -2974,7 +2974,7 @@ export const contracts = {
     "clarity_version": "Clarity1",
     contractName: "clarity-bitcoin",
   },
-  ordyswap: {
+  ordy: {
     "functions": {
       makeNextId: {
         "name": "make-next-id",
@@ -3365,7 +3365,7 @@ export const contracts = {
     "non_fungible_tokens": [],
     "fungible_tokens": [],
     "clarity_version": "Clarity1",
-    contractName: "ordyswap",
+    contractName: "ordy",
   },
 } as const;
 

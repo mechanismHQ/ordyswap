@@ -7,7 +7,7 @@ cache_dir = './.cache'
 
 [[project.requirements]]
 contract_id = 'SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin'
-[contracts.ordyswap]
+[contracts.ordy]
 path = 'contracts/ord-swap.clar'
 clarity_version = 1
 epoch = 2.0

@@ -32,7 +32,7 @@ export const Tx: React.FC<{ children?: React.ReactNode }> = () => {
   }
   return (
     <div>
-      <p>paste in tx data from teh cli, and it'll open the stacks wallet</p>
+      <p>paste in tx data from the cli, and it'll open the stacks wallet</p>
       <form
         onSubmit={(e) => {
           e.preventDefault();

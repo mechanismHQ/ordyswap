@@ -1,14 +1,13 @@
 {
-  "name": "ordyswap",
+  "name": "ordyswap-root",
   "version": "1.1.1",
   "description": "",
   "main": "index.js",
   "private": false,
   "scripts": {
-    "cli:dev": "node -r @swc-node/register src/commands/index.ts",
-    "build": "tsup-node src/commands/index.ts --format esm",
-    "dev": "pnpm build && node dist/index.mjs",
-    "run": "node dist/index.mjs",
+    "build": "pnpm -r build",
+    "dev": "pnpm --filter ordyswap dev",
+    "r": "node cli/dist/index.mjs",
     "prepublishOnly": "pnpm build",
     "build:web": "pnpm --filter ordyswap-web build"
   },
@@ -23,26 +22,6 @@
   "author": "Hank Stoever",
   "license": "ISC",
   "dependencies": {
-    "@clarigen/core": "^1.0.10",
-    "@clarigen/node": "^1.0.10",
-    "@commander-js/extra-typings": "^10.0.2",
-    "ansi-colors": "^4.1.3",
-    "bignumber.js": "^9.1.1",
-    "commander": "^10.0.0",
-    "electrum-client-sl": "^0.1.2",
-    "kleur": "^4.1.5",
-    "micro-btc-signer": "^0.3.0",
-    "micro-stacks": "^1.1.4",
-    "superjson": "^1.12.2"
-  },
-  "devDependencies": {
-    "@changesets/changelog-github": "^0.4.8",
-    "@changesets/cli": "^2.26.0",
-    "@stacks/stacks-blockchain-api-types": "^6.3.4",
-    "@swc-node/register": "^1.5.5",
-    "@swc/core": "^1.3.32",
-    "@types/node": "^18.11.19",
-    "tsup": "^6.5.0",
-    "typescript": "^4.9.5"
+    "@changesets/cli": "^2.26.0"
   }
 }

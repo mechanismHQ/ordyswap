@@ -9,5 +9,5 @@ export const { test, contracts, accounts } = factory(simnet);
 
 export const {
   clarityBitcoin,
-  ordyswap
+  ordy
 } = contracts;

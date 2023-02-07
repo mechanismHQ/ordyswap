@@ -12,7 +12,7 @@ helper = "tests/clarigen.ts"
 # Comment or remove section to skip ESM types
 [esm]
 # `output` can be a directory or a folder.
-output = "src/clarigen.ts"
+output = "cli/src/clarigen.ts"
 
 # `esm.after` - script to run after ESM types are generated.
 # examples:

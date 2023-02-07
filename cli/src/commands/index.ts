@@ -181,14 +181,28 @@ const getTxDataCmd = new Command("get-tx-data")
   .option("--verbose", "", false)
   .action(async (txid, offerIdStr, options) => {
     const pending = await getTxPending(txid);
-    if (!offerIdStr || typeof pending.confirmations === "undefined") {
+    if (!offerIdStr) {
       console.log("Inputs:");
       pending.vin.forEach((vin) => {
         console.log(`${vin.txid}.${vin.vout}`);
       });
       return;
     }
-    const txData = await getTxData(txid, await getOffer(offerIdStr));
+    const offer = await getOffer(offerIdStr);
+    if (typeof pending.confirmations === "undefined") {
+      const address = outputToAddress(offer.output);
+      const outputIndex = pending.vout.findIndex((vout) => {
+        return vout.scriptPubKey.address === address;
+      });
+      if (outputIndex === 1) {
+        console.log(c.red("No matching output found for this offer"));
+        return;
+      }
+      console.log(
+        c.bold.green("The tx looks good! You can finalize after confirmation.")
+      );
+    }
+    const txData = await getTxData(txid, offer);
     if (txData.inputIndex === -1) {
       throw new Error("Expected inputIndex");
     }
@@ -206,19 +220,37 @@ const getTxDataCmd = new Command("get-tx-data")
 
 program.addCommand(getTxDataCmd);
 
-const getLogs = new Command("events").action(async () => {
-  const events = await getAllPrints();
-  events.forEach((e) => {
-    console.log("-----");
-    const {
-      print: { topic, ...rest },
-    } = e;
-    console.log(c.bold(topic));
-    console.log(rest);
+const getLogs = new Command("logs")
+  .addHelpText("before", "Show contract logs (new offers, etc)")
+  .action(async () => {
+    const events = await getAllPrints();
+    events.forEach((e) => {
+      console.log("-----");
+      const {
+        print: { topic, ...rest },
+      } = e;
+      console.log(c.bold(topic));
+      console.log(rest);
+    });
   });
-});
 
 program.addCommand(getLogs);
+
+program.addCommand(
+  new Command("cancel-offer").argument("<offerId>").action((idStr) => {
+    const id = BigInt(idStr);
+    const tx = swapContract().cancelOffer(id);
+
+    serializeTx(tx);
+  })
+);
+
+program.addCommand(
+  new Command("refund-offer").argument("<offerId>").action((idStr) => {
+    const id = BigInt(idStr);
+    serializeTx(swapContract().refundCancelledOffer(id));
+  })
+);
 
 async function run() {
   await program.parseAsync(process.argv);

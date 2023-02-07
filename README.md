@@ -128,6 +128,18 @@ Users can cancel an offer and eventually get their STX back. The flow for fully 
 
 The 50 block required wait is to prevent an attack where an offer is cancelled as soon as they see the Ordinal transfer in the mempool.
 
+To cancel an order:
+
+```bash
+ordyswap cancel-order <id>
+```
+
+After 50 blocks:
+
+```bash
+ordyswap refund-order <id>
+```
+
 ## FAQ
 
 ### Can I make a swap with other Stacks assets (like an NFT or a fungible token like xBTC)?

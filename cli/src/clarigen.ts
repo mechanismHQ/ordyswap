@@ -1829,7 +1829,7 @@ export const contracts = {
   "fungible_tokens":[],"clarity_version":"Clarity1",
   contractName: 'clarity-bitcoin',
   },
-ordyswap: {
+ordy: {
   "functions": {
     makeNextId: {"name":"make-next-id","access":"private","args":[],"outputs":{"type":"uint128"}} as TypedAbiFunction<[], bigint>,
     cancelOffer: {"name":"cancel-offer","access":"public","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], Response<boolean, bigint>>,
@@ -1981,12 +1981,12 @@ ordyswap: {
     
   ],
   "fungible_tokens":[],"clarity_version":"Clarity1",
-  contractName: 'ordyswap',
+  contractName: 'ordy',
   }
 } as const;
 
 
-export const deployments = {"clarityBitcoin":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.clarity-bitcoin","simnet":"SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin","testnet":null,"mainnet":"SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin"},"ordyswap":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.ordyswap","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.ordyswap","testnet":null,"mainnet":"SP4XW6YXH4FYZZSYVDAX5SMFJQJ4WWGXG0K09QGS.ordyswap"}} as const;
+export const deployments = {"clarityBitcoin":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.clarity-bitcoin","simnet":"SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin","testnet":null,"mainnet":"SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin"},"ordy":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.ordy","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.ordy","testnet":null,"mainnet":"SP4XW6YXH4FYZZSYVDAX5SMFJQJ4WWGXG0K09QGS.ordy"}} as const;
 
 export const project = {
   contracts,
