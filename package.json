@@ -3,7 +3,7 @@
   "version": "1.1.1",
   "description": "",
   "main": "index.js",
-  "private": false,
+  "private": true,
   "scripts": {
     "build": "pnpm -r build",
     "dev": "pnpm --filter ordyswap dev",
