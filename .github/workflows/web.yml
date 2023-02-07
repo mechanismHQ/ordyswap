@@ -14,10 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2
         with:
-          node-version: 18.x
-          cache: pnpm
+          version: 7.25.1
+      - name: Set Node Version
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.13.0
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install
