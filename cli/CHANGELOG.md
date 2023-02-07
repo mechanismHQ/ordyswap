@@ -1,5 +1,11 @@
 # ordyswap
 
+## 1.2.0
+
+### Minor Changes
+
+- b97ae4d: Updates contracts to print and return offer IDs
+
 ## 1.1.2
 
 ### Patch Changes
