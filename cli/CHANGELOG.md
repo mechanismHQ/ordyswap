@@ -1,5 +1,11 @@
 # ordyswap
 
+## 1.2.1
+
+### Patch Changes
+
+- f49cfde: Docs for sending an output (advanced)
+
 ## 1.2.0
 
 ### Minor Changes

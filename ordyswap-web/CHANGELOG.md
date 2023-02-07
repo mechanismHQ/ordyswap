@@ -1,5 +1,11 @@
 # ordyswap-web
 
+## 0.2.1
+
+### Patch Changes
+
+- f49cfde: Docs for sending an output (advanced)
+
 ## 0.2.0
 
 ### Minor Changes
