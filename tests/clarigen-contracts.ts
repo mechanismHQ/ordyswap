@@ -2974,7 +2974,7 @@ export const contracts = {
     "clarity_version": "Clarity1",
     contractName: "clarity-bitcoin",
   },
-  ordSwap: {
+  ordyswap: {
     "functions": {
       makeNextId: {
         "name": "make-next-id",
@@ -2982,8 +2982,42 @@ export const contracts = {
         "args": [],
         "outputs": { "type": "uint128" },
       } as TypedAbiFunction<[], bigint>,
-      acceptOffer: {
-        "name": "accept-offer",
+      cancelOffer: {
+        "name": "cancel-offer",
+        "access": "public",
+        "args": [{ "name": "id", "type": "uint128" }],
+        "outputs": {
+          "type": { "response": { "ok": "bool", "error": "uint128" } },
+        },
+      } as TypedAbiFunction<
+        [id: TypedAbiArg<number | bigint, "id">],
+        Response<boolean, bigint>
+      >,
+      createOffer: {
+        "name": "create-offer",
+        "access": "public",
+        "args": [
+          { "name": "txid", "type": { "buffer": { "length": 32 } } },
+          { "name": "index", "type": "uint128" },
+          { "name": "amount", "type": "uint128" },
+          { "name": "output", "type": { "buffer": { "length": 128 } } },
+          { "name": "recipient", "type": "principal" },
+        ],
+        "outputs": {
+          "type": { "response": { "ok": "bool", "error": "uint128" } },
+        },
+      } as TypedAbiFunction<
+        [
+          txid: TypedAbiArg<Uint8Array, "txid">,
+          index: TypedAbiArg<number | bigint, "index">,
+          amount: TypedAbiArg<number | bigint, "amount">,
+          output: TypedAbiArg<Uint8Array, "output">,
+          recipient: TypedAbiArg<string, "recipient">,
+        ],
+        Response<boolean, bigint>
+      >,
+      finalizeOffer: {
+        "name": "finalize-offer",
         "access": "public",
         "args": [
           {
@@ -3021,6 +3055,7 @@ export const contracts = {
             },
           },
           { "name": "output-index", "type": "uint128" },
+          { "name": "input-index", "type": "uint128" },
           { "name": "offer-id", "type": "uint128" },
         ],
         "outputs": {
@@ -3039,44 +3074,11 @@ export const contracts = {
           "txIndex": number | bigint;
         }, "proof">,
         outputIndex: TypedAbiArg<number | bigint, "outputIndex">,
+        inputIndex: TypedAbiArg<number | bigint, "inputIndex">,
         offerId: TypedAbiArg<number | bigint, "offerId">,
       ], Response<boolean, bigint>>,
-      cancelOffer: {
-        "name": "cancel-offer",
-        "access": "public",
-        "args": [{ "name": "id", "type": "uint128" }],
-        "outputs": {
-          "type": { "response": { "ok": "bool", "error": "uint128" } },
-        },
-      } as TypedAbiFunction<
-        [id: TypedAbiArg<number | bigint, "id">],
-        Response<boolean, bigint>
-      >,
-      createOffer: {
-        "name": "create-offer",
-        "access": "public",
-        "args": [
-          { "name": "txid", "type": { "buffer": { "length": 32 } } },
-          { "name": "index", "type": "uint128" },
-          { "name": "amount", "type": "uint128" },
-          { "name": "output", "type": { "buffer": { "length": 128 } } },
-          { "name": "recipient", "type": "principal" },
-        ],
-        "outputs": {
-          "type": { "response": { "ok": "bool", "error": "uint128" } },
-        },
-      } as TypedAbiFunction<
-        [
-          txid: TypedAbiArg<Uint8Array, "txid">,
-          index: TypedAbiArg<number | bigint, "index">,
-          amount: TypedAbiArg<number | bigint, "amount">,
-          output: TypedAbiArg<Uint8Array, "output">,
-          recipient: TypedAbiArg<string, "recipient">,
-        ],
-        Response<boolean, bigint>
-      >,
-      redeemCancelledOffer: {
-        "name": "redeem-cancelled-offer",
+      refundCancelledOffer: {
+        "name": "refund-cancelled-offer",
         "access": "public",
         "args": [{ "name": "id", "type": "uint128" }],
         "outputs": {
@@ -3180,6 +3182,7 @@ export const contracts = {
               ],
             },
           },
+          { "name": "input-index", "type": "uint128" },
           { "name": "output-index", "type": "uint128" },
           { "name": "offer-id", "type": "uint128" },
         ],
@@ -3213,6 +3216,7 @@ export const contracts = {
             "treeDepth": number | bigint;
             "txIndex": number | bigint;
           }, "proof">,
+          inputIndex: TypedAbiArg<number | bigint, "inputIndex">,
           outputIndex: TypedAbiArg<number | bigint, "outputIndex">,
           offerId: TypedAbiArg<number | bigint, "offerId">,
         ],
@@ -3361,7 +3365,7 @@ export const contracts = {
     "non_fungible_tokens": [],
     "fungible_tokens": [],
     "clarity_version": "Clarity1",
-    contractName: "ord-swap",
+    contractName: "ordyswap",
   },
 } as const;
 

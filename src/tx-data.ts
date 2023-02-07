@@ -5,8 +5,9 @@ import {
 } from "micro-stacks/api";
 import { bytesToHex, hexToBytes } from "micro-stacks/common";
 import { StacksMainnet } from "micro-stacks/network";
-import { btcToSats, reverseBuffer } from "./utils";
+import { btcToSats, outputToAddress, reverseBuffer } from "./utils";
 import { Transaction } from "micro-btc-signer";
+import type { Offer } from "./contract";
 
 export const network = new StacksMainnet();
 
@@ -99,16 +100,14 @@ export async function getTxPending(txid: string) {
   });
 }
 
-export async function getTxData(txid: string, address: string) {
+export async function getTxData(txid: string, offer: Offer) {
   return withElectrumClient(async (electrumClient) => {
+    const address = outputToAddress(offer.output);
+    console.log("address", address);
+    const ordTxid = bytesToHex(offer.txid);
+    const ordIdx = Number(offer.index);
     const tx = await electrumClient.blockchain_transaction_get(txid, true);
     if (typeof tx.confirmations === "undefined" || tx.confirmations < 1) {
-      // console.log("Tx is not confirmed");
-      // console.log("Inputs:");
-      // tx.vin.forEach((vin) => {
-      //   const ordId = `${vin.txid}i${vin.vout}`;
-      //   console.log(ordId);
-      // });
       throw new Error("Tx is not confirmed");
     }
     const burnHeight = await confirmationsToHeight(tx.confirmations);
@@ -140,6 +139,10 @@ export async function getTxData(txid: string, address: string) {
 
     const txHex = getTxHex(tx.hex);
 
+    const inputIndex = tx.vin.findIndex((vin) => {
+      return vin.txid === ordTxid && vin.vout === ordIdx;
+    });
+
     const proofArg = {
       hashes: hashes,
       txIndex: merkle.pos,
@@ -155,6 +158,7 @@ export async function getTxData(txid: string, address: string) {
       outputIndex,
       amount,
       burnHeight,
+      inputIndex,
     };
   });
 }

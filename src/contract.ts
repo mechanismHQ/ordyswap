@@ -1,12 +1,20 @@
 import { project, contracts } from "./clarigen";
-import { contractFactory, projectFactory } from "@clarigen/core";
+import {
+  contractFactory,
+  projectFactory,
+  FunctionReturnType,
+} from "@clarigen/core";
 import { ClarigenNodeClient } from "@clarigen/node";
 import { StacksMainnet } from "micro-stacks/network";
 import { outputToAddress } from "./utils";
 import { getTxData, getTxPending } from "./tx-data";
 
+export type Offer = NonNullable<
+  FunctionReturnType<(typeof contracts)["ordyswap"]["functions"]["getOffer"]>
+>;
+
 export function swapContract() {
-  return projectFactory(project, "mainnet").ordSwap;
+  return projectFactory(project, "mainnet").ordyswap;
   // return contractFactory(contracts.ordSwap, "AAA.b");
 }
 
@@ -34,7 +42,7 @@ export async function isTransferValid(txid: string, offerId: string) {
     throw new Error(`No offer with id ${offerId}`);
   }
   const recipientBtc = outputToAddress(offer.output);
-  const txBase = await getTxPending(txid, recipientBtc);
+  const txBase = await getTxPending(txid);
   if (!txBase.confirmations) {
     console.log("Transaction is pending. Checking validity");
     return {
@@ -42,7 +50,7 @@ export async function isTransferValid(txid: string, offerId: string) {
       value: 0n,
     };
   }
-  const txData = await getTxData(txid, recipientBtc);
+  const txData = await getTxData(txid, offer);
   const checkValid = swapContract().validateOfferTransfer({
     tx: txData.txHex,
     outputIndex: txData.outputIndex,
@@ -50,6 +58,7 @@ export async function isTransferValid(txid: string, offerId: string) {
     prevBlocks: txData.prevBlocks,
     proof: txData.proof,
     block: txData.block,
+    inputIndex: txData.inputIndex,
   });
   const result = await clarigenClient().ro(checkValid, { latest: true });
   return result;

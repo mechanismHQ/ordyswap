@@ -62,11 +62,21 @@
   )
 )
 
+;; Helper function to validate the transfer of an Ordinal.
+;; 
+;; This function is validating:
+;; 
+;; - The transaction was mined in a BTC block
+;; - The transaction was sent to the right address
+;; - The transaction includes the right Ordinal as an input
+;; - The offer wasn't cancelled
+;; - The offer wasn't already accepted
 (define-read-only (validate-offer-transfer
     (block { header: (buff 80), height: uint })
     (prev-blocks (list 10 (buff 80)))
     (tx (buff 1024))
     (proof { tx-index: uint, hashes: (list 12 (buff 32)), tree-depth: uint })
+    (input-index uint)
     (output-index uint)
     (offer-id uint)
   )
@@ -78,8 +88,7 @@
       (parsed-tx (unwrap! (contract-call? 'SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin parse-tx tx) ERR_INVALID_TX))
       (output (unwrap! (element-at (get outs parsed-tx) output-index) ERR_INVALID_TX))
       (offer (unwrap! (map-get? offers-map offer-id) ERR_INVALID_OFFER))
-      ;; TODO: fix this, incorrect fetching of input
-      (input (get outpoint (unwrap! (element-at (get ins parsed-tx) (get index offer)) ERR_INVALID_TX)))
+      (input (get outpoint (unwrap! (element-at (get ins parsed-tx) input-index) ERR_INVALID_TX)))
       (input-txid (get hash input))
       (input-idx (get index input))
     )
@@ -101,20 +110,26 @@
   )
 )
 
-(define-public (accept-offer
+(define-public (finalize-offer
     (block { header: (buff 80), height: uint })
     (prev-blocks (list 10 (buff 80)))
     (tx (buff 1024))
     (proof { tx-index: uint, hashes: (list 12 (buff 32)), tree-depth: uint })
     (output-index uint)
+    (input-index uint)
     (offer-id uint)
   )
   (let
     (
-      (offer (try! (validate-offer-transfer block prev-blocks tx proof output-index offer-id)))
+      (offer (try! (validate-offer-transfer block prev-blocks tx proof input-index output-index offer-id)))
     )
     (try! (as-contract (stx-transfer? (get amount offer) (as-contract tx-sender) (get recipient offer))))
     (asserts! (map-insert offers-accepted-map offer-id true) ERR_OFFER_ACCEPTED)
+    (print {
+      topic: "offer-finalized",
+      offer: offer,
+      txid: (contract-call? 'SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin get-txid tx)
+    })
     (ok true)
   )
 )
@@ -132,12 +147,16 @@
     (asserts! (is-eq (get sender offer) tx-sender) ERR_INVALID_OFFER)
     
     (asserts! (map-insert offers-cancelled-map id (+ burn-block-height u50)) ERR_INVALID_OFFER)
+    (print {
+      topic: "offer-cancelled",
+      offer: offer,
+    })
     (ok true)
   )
 )
 
 ;; 50+ blocks after cancelling, the offerer can get their STX back
-(define-public (redeem-cancelled-offer (id uint))
+(define-public (refund-cancelled-offer (id uint))
   (let
     (
       (offer (unwrap! (map-get? offers-map id) ERR_INVALID_OFFER))
@@ -146,6 +165,10 @@
     (asserts! (> burn-block-height cancelled) ERR_INVALID_OFFER)
     (asserts! (map-insert offers-refunded-map id true) ERR_INVALID_OFFER)
     (try! (as-contract (stx-transfer? (get amount offer) (as-contract tx-sender) (get sender offer))))
+    (print {
+      topic: "offer-refunded",
+      offer: offer,
+    })
     (ok true)
   )
 )

@@ -23,7 +23,7 @@ Trustless atomic swaps between Ordinals and Stacks (STX).
     - [Check the validity of a transfer](#check-the-validity-of-a-transfer)
     - [Cancelling an offer](#cancelling-an-offer)
   - [FAQ](#faq)
-    - [Can I make a swap with other Stacks assets like an NFT or fungible token like xBTC?](#can-i-make-a-swap-with-other-stacks-assets-like-an-nft-or-fungible-token-like-xbtc)
+    - [Can I make a swap with other Stacks assets like an NFT or a fungible token like xBTC?](#can-i-make-a-swap-with-other-stacks-assets-like-an-nft-or-a-fungible-token-like-xbtc)
     - [Can I make a swap for BTC?](#can-i-make-a-swap-for-btc)
     - [Is this actively developed?](#is-this-actively-developed)
     - [What is up with this funky website where I paste in my tx?](#what-is-up-with-this-funky-website-where-i-paste-in-my-tx)
@@ -130,7 +130,7 @@ The 50 block required wait is to prevent an attack where an offer is cancelled a
 
 ## FAQ
 
-### Can I make a swap with other Stacks assets (like an NFT or fungible token like xBTC)?
+### Can I make a swap with other Stacks assets (like an NFT or a fungible token like xBTC)?
 
 Not in this version of the contract, but it wouldn't take a big change to make that possible.
 

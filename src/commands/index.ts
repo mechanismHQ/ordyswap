@@ -19,21 +19,31 @@ import { stringify } from "superjson";
 import { ClarityValue } from "micro-stacks/clarity";
 import BigNumber from "bignumber.js";
 import { getTxData, getTxPending } from "../tx-data";
+import {
+  createSTXPostCondition,
+  PostCondition,
+} from "micro-stacks/transactions";
+// import { bold, yellow, red, italic, underline } from "kleur/colors";
+import c from "ansi-colors";
 
 program.name("ordyswap").description("CLI for making Ordinal atomic swaps");
 
-function serializeTx(tx: {
-  contractName: string;
-  contractAddress: string;
-  functionArgs: ClarityValue[];
-  functionName: string;
-}) {
+function serializeTx(
+  tx: {
+    contractName: string;
+    contractAddress: string;
+    functionArgs: ClarityValue[];
+    functionName: string;
+  },
+  postConditions: PostCondition[] = []
+) {
   const { contractAddress, contractName, functionArgs, functionName } = tx;
   const json = stringify({
     contractAddress,
     contractName,
     functionArgs,
     functionName,
+    postConditions,
   });
   console.log("\n---------\nCopy this JSON:\n");
   console.log(json);
@@ -48,18 +58,28 @@ const makeOffer = new Command("make-offer")
   .action((ordId, amount, btcAddress, recipientAddress) => {
     const { txid, index } = decodeOrdId(ordId);
     const ustx = stxToMicroStx(amount);
-    console.log(`Ordinal: https://ordinals.com/inscription/${ordId}`);
-    console.log("txid", txid);
-    console.log("index", index);
-    console.log("ustx", ustx.toFormat());
-    console.log("STX amount", amount);
+    console.log(c.bold.yellow.bgRed.italic("Important!"));
+    const url = `https://ordinals.com/inscription/${ordId}`;
+    console.log(c.red(`Visit ${c.underline.blue(url)}`));
+    console.log(c.red('and make sure the "output" property matches:'));
+    console.log(c.italic(`${txid}:${index}`));
+    console.log("");
+    console.log("Offer details:");
+    console.log("");
+    console.log(`${c.bold(amount)} STX`);
+    // console.log("ustx", ustx.toFormat());
+    // console.log("STX amount", amount);
     const output = addressToOutput(btcAddress);
-    console.log("btcAddress", btcAddress);
-    console.log("Output", bytesToHex(output));
+    console.log("Your BTC Address:", c.bold(btcAddress));
+    console.log(
+      "Output (scriptHash of your BTC Address):",
+      c.italic(bytesToHex(output))
+    );
     const addr = Address().decode(btcAddress);
     if (addr.type !== "tr") {
       console.log("The BTC address provided is not p2tr. Exiting.");
     }
+    console.log(`Recipient STX address:`, c.bold(recipientAddress));
 
     const tx = swapContract().createOffer({
       txid: hexToBytes(txid),
@@ -68,6 +88,7 @@ const makeOffer = new Command("make-offer")
       recipient: recipientAddress,
       amount: BigInt(ustx.toFixed()),
     });
+    // const postCondition = createSTXPostCondition()
     serializeTx(tx);
     // console.log(tx.nativeArgs);
   });
@@ -133,16 +154,16 @@ const acceptOffer = new Command("finalize-offer")
       return;
     }
     console.log("Transfer is valid!");
-    const recipientBtc = outputToAddress(offer.output);
-    const txData = await getTxData(txid, recipientBtc);
+    const txData = await getTxData(txid, offer);
 
-    const tx = swapContract().acceptOffer({
+    const tx = swapContract().finalizeOffer({
       block: txData.block,
       proof: txData.proof,
       prevBlocks: txData.prevBlocks,
       offerId: offer.id,
       tx: txData.txHex,
       outputIndex: txData.outputIndex,
+      inputIndex: txData.inputIndex,
     });
 
     serializeTx(tx);
@@ -162,6 +183,10 @@ const getTxDataCmd = new Command("get-tx-data")
         console.log(`${vin.txid}.${vin.vout}`);
       });
       return;
+    }
+    const txData = await getTxData(txid, await getOffer(offerIdStr));
+    if (txData.inputIndex === -1) {
+      throw new Error("Expected inputIndex");
     }
     const result = await isTransferValid(txid, offerIdStr);
     if (result.isOk) {

@@ -1829,20 +1829,20 @@ export const contracts = {
   "fungible_tokens":[],"clarity_version":"Clarity1",
   contractName: 'clarity-bitcoin',
   },
-ordSwap: {
+ordyswap: {
   "functions": {
     makeNextId: {"name":"make-next-id","access":"private","args":[],"outputs":{"type":"uint128"}} as TypedAbiFunction<[], bigint>,
-    acceptOffer: {"name":"accept-offer","access":"public","args":[{"name":"block","type":{"tuple":[{"name":"header","type":{"buffer":{"length":80}}},{"name":"height","type":"uint128"}]}},{"name":"prev-blocks","type":{"list":{"type":{"buffer":{"length":80}},"length":10}}},{"name":"tx","type":{"buffer":{"length":1024}}},{"name":"proof","type":{"tuple":[{"name":"hashes","type":{"list":{"type":{"buffer":{"length":32}},"length":12}}},{"name":"tree-depth","type":"uint128"},{"name":"tx-index","type":"uint128"}]}},{"name":"output-index","type":"uint128"},{"name":"offer-id","type":"uint128"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[block: TypedAbiArg<{
+    cancelOffer: {"name":"cancel-offer","access":"public","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], Response<boolean, bigint>>,
+    createOffer: {"name":"create-offer","access":"public","args":[{"name":"txid","type":{"buffer":{"length":32}}},{"name":"index","type":"uint128"},{"name":"amount","type":"uint128"},{"name":"output","type":{"buffer":{"length":128}}},{"name":"recipient","type":"principal"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[txid: TypedAbiArg<Uint8Array, "txid">, index: TypedAbiArg<number | bigint, "index">, amount: TypedAbiArg<number | bigint, "amount">, output: TypedAbiArg<Uint8Array, "output">, recipient: TypedAbiArg<string, "recipient">], Response<boolean, bigint>>,
+    finalizeOffer: {"name":"finalize-offer","access":"public","args":[{"name":"block","type":{"tuple":[{"name":"header","type":{"buffer":{"length":80}}},{"name":"height","type":"uint128"}]}},{"name":"prev-blocks","type":{"list":{"type":{"buffer":{"length":80}},"length":10}}},{"name":"tx","type":{"buffer":{"length":1024}}},{"name":"proof","type":{"tuple":[{"name":"hashes","type":{"list":{"type":{"buffer":{"length":32}},"length":12}}},{"name":"tree-depth","type":"uint128"},{"name":"tx-index","type":"uint128"}]}},{"name":"output-index","type":"uint128"},{"name":"input-index","type":"uint128"},{"name":"offer-id","type":"uint128"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[block: TypedAbiArg<{
   "header": Uint8Array;
   "height": number | bigint;
 }, "block">, prevBlocks: TypedAbiArg<Uint8Array[], "prevBlocks">, tx: TypedAbiArg<Uint8Array, "tx">, proof: TypedAbiArg<{
   "hashes": Uint8Array[];
   "treeDepth": number | bigint;
   "txIndex": number | bigint;
-}, "proof">, outputIndex: TypedAbiArg<number | bigint, "outputIndex">, offerId: TypedAbiArg<number | bigint, "offerId">], Response<boolean, bigint>>,
-    cancelOffer: {"name":"cancel-offer","access":"public","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], Response<boolean, bigint>>,
-    createOffer: {"name":"create-offer","access":"public","args":[{"name":"txid","type":{"buffer":{"length":32}}},{"name":"index","type":"uint128"},{"name":"amount","type":"uint128"},{"name":"output","type":{"buffer":{"length":128}}},{"name":"recipient","type":"principal"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[txid: TypedAbiArg<Uint8Array, "txid">, index: TypedAbiArg<number | bigint, "index">, amount: TypedAbiArg<number | bigint, "amount">, output: TypedAbiArg<Uint8Array, "output">, recipient: TypedAbiArg<string, "recipient">], Response<boolean, bigint>>,
-    redeemCancelledOffer: {"name":"redeem-cancelled-offer","access":"public","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], Response<boolean, bigint>>,
+}, "proof">, outputIndex: TypedAbiArg<number | bigint, "outputIndex">, inputIndex: TypedAbiArg<number | bigint, "inputIndex">, offerId: TypedAbiArg<number | bigint, "offerId">], Response<boolean, bigint>>,
+    refundCancelledOffer: {"name":"refund-cancelled-offer","access":"public","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], Response<boolean, bigint>>,
     getOffer: {"name":"get-offer","access":"read_only","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"optional":{"tuple":[{"name":"amount","type":"uint128"},{"name":"index","type":"uint128"},{"name":"output","type":{"buffer":{"length":128}}},{"name":"recipient","type":"principal"},{"name":"sender","type":"principal"},{"name":"txid","type":{"buffer":{"length":32}}}]}}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], {
   "amount": bigint;
   "index": bigint;
@@ -1854,14 +1854,14 @@ ordSwap: {
     getOfferAccepted: {"name":"get-offer-accepted","access":"read_only","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"optional":"bool"}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], boolean | null>,
     getOfferCancelled: {"name":"get-offer-cancelled","access":"read_only","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"optional":"uint128"}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], bigint | null>,
     getOfferRefunded: {"name":"get-offer-refunded","access":"read_only","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"optional":"uint128"}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], bigint | null>,
-    validateOfferTransfer: {"name":"validate-offer-transfer","access":"read_only","args":[{"name":"block","type":{"tuple":[{"name":"header","type":{"buffer":{"length":80}}},{"name":"height","type":"uint128"}]}},{"name":"prev-blocks","type":{"list":{"type":{"buffer":{"length":80}},"length":10}}},{"name":"tx","type":{"buffer":{"length":1024}}},{"name":"proof","type":{"tuple":[{"name":"hashes","type":{"list":{"type":{"buffer":{"length":32}},"length":12}}},{"name":"tree-depth","type":"uint128"},{"name":"tx-index","type":"uint128"}]}},{"name":"output-index","type":"uint128"},{"name":"offer-id","type":"uint128"}],"outputs":{"type":{"response":{"ok":{"tuple":[{"name":"amount","type":"uint128"},{"name":"index","type":"uint128"},{"name":"output","type":{"buffer":{"length":128}}},{"name":"recipient","type":"principal"},{"name":"sender","type":"principal"},{"name":"txid","type":{"buffer":{"length":32}}}]},"error":"uint128"}}}} as TypedAbiFunction<[block: TypedAbiArg<{
+    validateOfferTransfer: {"name":"validate-offer-transfer","access":"read_only","args":[{"name":"block","type":{"tuple":[{"name":"header","type":{"buffer":{"length":80}}},{"name":"height","type":"uint128"}]}},{"name":"prev-blocks","type":{"list":{"type":{"buffer":{"length":80}},"length":10}}},{"name":"tx","type":{"buffer":{"length":1024}}},{"name":"proof","type":{"tuple":[{"name":"hashes","type":{"list":{"type":{"buffer":{"length":32}},"length":12}}},{"name":"tree-depth","type":"uint128"},{"name":"tx-index","type":"uint128"}]}},{"name":"input-index","type":"uint128"},{"name":"output-index","type":"uint128"},{"name":"offer-id","type":"uint128"}],"outputs":{"type":{"response":{"ok":{"tuple":[{"name":"amount","type":"uint128"},{"name":"index","type":"uint128"},{"name":"output","type":{"buffer":{"length":128}}},{"name":"recipient","type":"principal"},{"name":"sender","type":"principal"},{"name":"txid","type":{"buffer":{"length":32}}}]},"error":"uint128"}}}} as TypedAbiFunction<[block: TypedAbiArg<{
   "header": Uint8Array;
   "height": number | bigint;
 }, "block">, prevBlocks: TypedAbiArg<Uint8Array[], "prevBlocks">, tx: TypedAbiArg<Uint8Array, "tx">, proof: TypedAbiArg<{
   "hashes": Uint8Array[];
   "treeDepth": number | bigint;
   "txIndex": number | bigint;
-}, "proof">, outputIndex: TypedAbiArg<number | bigint, "outputIndex">, offerId: TypedAbiArg<number | bigint, "offerId">], Response<{
+}, "proof">, inputIndex: TypedAbiArg<number | bigint, "inputIndex">, outputIndex: TypedAbiArg<number | bigint, "outputIndex">, offerId: TypedAbiArg<number | bigint, "offerId">], Response<{
   "amount": bigint;
   "index": bigint;
   "output": Uint8Array;
@@ -1981,12 +1981,12 @@ ordSwap: {
     
   ],
   "fungible_tokens":[],"clarity_version":"Clarity1",
-  contractName: 'ord-swap',
+  contractName: 'ordyswap',
   }
 } as const;
 
 
-export const deployments = {"clarityBitcoin":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.clarity-bitcoin","simnet":"SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin","testnet":null,"mainnet":"SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin"},"ordSwap":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.ord-swap","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.ord-swap","testnet":null,"mainnet":"SP4XW6YXH4FYZZSYVDAX5SMFJQJ4WWGXG0K09QGS.ord-swap"}} as const;
+export const deployments = {"clarityBitcoin":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.clarity-bitcoin","simnet":"SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin","testnet":null,"mainnet":"SP1WN90HKT0E1FWCJT9JFPMC8YP7XGBGFNZGHRVZX.clarity-bitcoin"},"ordyswap":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.ordyswap","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.ordyswap","testnet":null,"mainnet":"SP4XW6YXH4FYZZSYVDAX5SMFJQJ4WWGXG0K09QGS.ordyswap"}} as const;
 
 export const project = {
   contracts,
