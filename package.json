@@ -8,7 +8,6 @@
     "build": "pnpm -r build",
     "dev": "pnpm --filter ordyswap dev",
     "r": "node cli/dist/index.mjs",
-    "prepublishOnly": "pnpm build",
     "build:web": "pnpm --filter ordyswap-web build"
   },
   "bin": {
