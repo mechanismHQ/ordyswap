@@ -62,7 +62,7 @@ const makeOffer = new Command("make-offer")
   .argument("<ordinalId>", "Ordinal ID")
   .argument("<amount>", "Amount of STX to offer")
   .argument("<btcAddress>", "You Bitcoin (taproot) address")
-  .argument("<recipient>", "The STX address of the current Ordinal owner")
+  .argument("<sellerStxAddress>", "The STX address of the Ordinal seller")
   .action((ordId, amount, btcAddress, recipientAddress) => {
     const { txid, index } = decodeOrdId(ordId);
     const ustx = stxToMicroStx(amount);
@@ -98,7 +98,7 @@ const makeOffer = new Command("make-offer")
     if (addr.type !== "tr") {
       console.log("The BTC address provided is not p2tr. Exiting.");
     }
-    console.log(`Recipient STX address:`, c.bold(recipientAddress));
+    console.log(`Seller STX address:`, c.bold(recipientAddress));
 
     const tx = swapContract().createOffer({
       txid: hexToBytes(txid),
@@ -134,9 +134,12 @@ const getOfferCmd = new Command("get-offer")
       console.log(`Couldn't find offer with ID ${id}`);
       return;
     }
-    console.log("Ordinal ID:", `${bytesToHex(offer.txid)}i${offer.index}`);
-    console.log("Recipient:", offer.recipient);
-    console.log("Sender:", offer.sender);
+    console.log(
+      "Ordinal ID:",
+      c.italic(`${bytesToHex(offer.txid)}i${offer.index}`)
+    );
+    console.log("Seller STX:", c.bold(offer.recipient));
+    console.log("Buyer STX:", c.bold(offer.sender));
     const amount = new BigNumber(offer.amount.toString())
       .shiftedBy(-6)
       .decimalPlaces(6);

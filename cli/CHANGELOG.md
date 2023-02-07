@@ -1,5 +1,11 @@
 # ordyswap
 
+## 1.2.3
+
+### Patch Changes
+
+- Change logs from recipient/sender to buyer/seller
+
 ## 1.2.2
 
 ### Patch Changes
