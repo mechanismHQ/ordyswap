@@ -29,6 +29,7 @@ Trustless atomic swaps between Ordinals and Stacks (STX).
     - [Is this actively developed?](#is-this-actively-developed)
     - [What is up with this funky website where I paste in my tx?](#what-is-up-with-this-funky-website-where-i-paste-in-my-tx)
     - [Help! The CLI says my offer doesn't exist or similar](#help-the-cli-says-my-offer-doesnt-exist-or-similar)
+    - [Is there a changelog?](#is-there-a-changelog)
 
 <!-- /TOC -->
 
@@ -179,3 +180,11 @@ In the spirit of shipping quickly, this project is just a CLI. I didn't want use
 ### Help! The CLI says my offer doesn't exist (or similar)
 
 The RPC endpoints sometimes have a little lag compared to what you might see on an explorer. If the transaction was just confirmed, wait a minute and try again.
+
+### Is there a changelog?
+
+Yep - in the `cli` directory: [`./cli/CHANGELOG.md`](./cli/CHANGELOG.md)
+
+### Where is the source code?
+
+All the CLI code is under [`./cli`](./cli). The web app's code is under [`./web`](./web)
