@@ -27,6 +27,7 @@ import {
 import c from "ansi-colors";
 import { getAllPrints } from "../logs";
 import { VERSION } from "./version";
+import { getAddressFromName } from "../stacks-api";
 
 program
   .name("ordyswap")
@@ -62,8 +63,11 @@ const makeOffer = new Command("make-offer")
   .argument("<ordinalId>", "Ordinal ID")
   .argument("<amount>", "Amount of STX to offer")
   .argument("<btcAddress>", "You Bitcoin (taproot) address")
-  .argument("<sellerStxAddress>", "The STX address of the Ordinal seller")
-  .action((ordId, amount, btcAddress, recipientAddress) => {
+  .argument(
+    "<sellerStxAddress>",
+    "The STX address of the Ordinal seller. You can also provide a BNS name."
+  )
+  .action(async (ordId, amount, btcAddress, recipientOrBns) => {
     const { txid, index } = decodeOrdId(ordId);
     const ustx = stxToMicroStx(amount);
     console.log(c.bold.yellow.bgRed.italic("Important!"));
@@ -82,6 +86,13 @@ const makeOffer = new Command("make-offer")
       console.log(c.italic(`${txid}:${index}`));
     }
 
+    let recipientAddress = recipientOrBns;
+    let isBns = false;
+    if (recipientOrBns.includes(".")) {
+      recipientAddress = await getAddressFromName(recipientOrBns);
+      isBns = true;
+    }
+
     console.log("");
     console.log("Offer details:");
     console.log("");
@@ -97,6 +108,9 @@ const makeOffer = new Command("make-offer")
     const addr = Address().decode(btcAddress);
     if (addr.type !== "tr") {
       console.log("The BTC address provided is not p2tr. Exiting.");
+    }
+    if (isBns) {
+      console.log("Seller BNS:", c.bold(recipientOrBns));
     }
     console.log(`Seller STX address:`, c.bold(recipientAddress));
 

@@ -1,5 +1,11 @@
 # ordyswap
 
+## 1.3.0
+
+### Minor Changes
+
+- Allows creating an offer to a BNSx / BNS name
+
 ## 1.2.3
 
 ### Patch Changes

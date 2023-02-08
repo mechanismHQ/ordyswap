@@ -22,6 +22,7 @@ Trustless atomic swaps between Ordinals and Stacks (STX).
     - [Finalize the offer](#finalize-the-offer)
     - [Check the validity of a transfer](#check-the-validity-of-a-transfer)
     - [Cancelling an offer](#cancelling-an-offer)
+    - [Get recent contract events](#get-recent-contract-events)
   - [Advanced: swapping an Ordinal that was already sent somewhere](#advanced-swapping-an-ordinal-that-was-already-sent-somewhere)
   - [FAQ](#faq)
     - [Can I make a swap with other Stacks assets like an NFT or a fungible token like xBTC?](#can-i-make-a-swap-with-other-stacks-assets-like-an-nft-or-a-fungible-token-like-xbtc)
@@ -30,6 +31,7 @@ Trustless atomic swaps between Ordinals and Stacks (STX).
     - [What is up with this funky website where I paste in my tx?](#what-is-up-with-this-funky-website-where-i-paste-in-my-tx)
     - [Help! The CLI says my offer doesn't exist or similar](#help-the-cli-says-my-offer-doesnt-exist-or-similar)
     - [Is there a changelog?](#is-there-a-changelog)
+    - [Where is the source code?](#where-is-the-source-code)
 
 <!-- /TOC -->
 
@@ -88,6 +90,8 @@ The arguments are:
 
 In the output will be a big JSON blob containing a transaction payload. Open up https://mechanismhq.github.io/ordyswap and paste in the transaction data. Hit "submit" and your installed wallet will open a popup allowing you to approve and sign your transaction.
 
+After you broadcast your transction, you can find your swap ID in the "result" section of the explorer. If the transaction was successful, you'll see something like `(ok u1)` - where "1" is the swap ID.
+
 ### Get offer details
 
 ```bash
@@ -141,6 +145,14 @@ After 50 blocks:
 
 ```bash
 ordyswap refund-order <id>
+```
+
+### Get recent contract events
+
+You can see the full stream of ordyswap events by running:
+
+```bash
+ordyswap events
 ```
 
 ## Advanced: swapping an Ordinal that was already sent somewhere
